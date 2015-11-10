@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
 echo "<html>" > index.html
+echo "<h1>tiny.cc/ord</h1>" >> index.html
 for HTML in see-*.html; do
   echo "<li><a href='$HTML'>$HTML</a>" >> index.html
 done
