@@ -1,0 +1,3 @@
+</div> <!-- close the writing text -->
+<div class='left drawing-pad-outer'>
+  <canvas id="can" class='left drawing-pad' width="240" height="300"></canvas>
