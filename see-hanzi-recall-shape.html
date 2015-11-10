@@ -1,0 +1,256 @@
+<html>
+  <head>
+    <meta charset='UTF-8'>
+    <meta name="viewport" content="width=320, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <style>
+      html {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .screen {
+        width: 320px;
+        height: 460px;
+      }
+      .icon {
+        background-repeat: no-repeat;
+        width: 60px;
+        height: 60px;
+        border: 0px black solid;
+      }
+      .icon.left {
+        float: left;
+      }
+      .icon.right {
+        float: right;
+      }
+      .icon.left.thought-white {
+        background: url('icons/thought/noun_14958_cc.png') -9px 0px;
+        background-size: 75px 71px;
+      }
+      .icon.right.thought-white {
+        background: url('icons/thought/noun_14958_cc.reversed.png') -6px 0px;
+        background-size: 75px 71px;
+      }
+      .icon.left.speech-white {
+        background: url('icons/speech/noun_42533_cc.png') -8px -5px;
+        background-size: 76px 82px;
+      }
+      .icon.right.speech-white {
+        background: url('icons/speech/noun_42533_cc.reversed.png') -8px -5px;
+        background-size: 76px 82px;
+      }
+      .icon.speech-black {
+        background: url('icons/speech/noun_10604_cc.png') -18px -8px;
+        background-size: 95px 95px;
+      }
+      .icon.thought-black {
+        background: url('icons/thought/noun_14957_cc.png') -12px -2px;
+        background-size: 80px 73px;
+      }
+      .icon.finger-black {
+        background: url('icons/finger/noun_54070_cc.png') -22px -3px;
+        background-size: 101px 76px;
+      }
+      .icon.finger-white {
+        background: url('icons/finger/noun_12250_cc.png') -17px 0px;
+        background-size: 91px 69px;
+      }
+      .left.icon.pencil {
+        background: url('icons/pencil/noun_347_cc.png') -4px 1px;
+        background-size: 68px 68px;
+      }
+      .right.icon.pencil {
+        background: url('icons/pencil/noun_347_cc.reversed.png') -4px 1px;
+        background-size: 68px 68px;
+      }
+      .left.icon.shapes {
+        background: url('icons/shapes/noun_124934_cc.png') -28px -11px;
+        background-size: 116px 95px;
+      }
+      .speech-pinyin {
+        font-family: 'Heiti SC';
+        font-size: 30pt;
+        line-height: 0.8em;
+        padding-top: 0.4em;
+      }
+      .left.speech-pinyin {
+        margin-left: 75px;
+      }
+      .right.speech-pinyin {
+        margin-right: 75px;
+        text-align: right;
+      }
+      .thought-english {
+        font-family: 'Heiti SC';
+        font-size: 30pt;
+        line-height: 0.8em;
+        padding-top: 0.3em;
+      }
+      .left.thought-english {
+        margin-left: 75px;
+      }
+      .right.thought-english {
+        margin-right: 75px;
+        text-align: right;
+      }
+      div.writing-hanzi {
+        font-family: sans-serif;
+        font-size: 40pt;
+        margin-left: 75px;
+        line-height: 1.15em;
+      }
+      div.left.writing-hanzi {
+        margin-left: 75px;
+      }
+      div.right.writing-hanzi {
+        margin-left: 75px;
+        text-align: right;
+      }
+      .left.writing-hanzi-outer {
+        margin-left: 75px;
+      }
+      .right.writing-hanzi-outer {
+        margin-right: 75px;
+        text-align: right;
+      }
+      input.writing-hanzi {
+        font-family: sans-serif;
+        font-size: 30pt;
+        height: 1.46em;
+        padding: 0;
+        width: 230px;
+      }
+      .shaped-like {
+        font-size: 20pt;
+      }
+      .left.shaped-like {
+        margin-left: 75px;
+      }
+      .drawing-pad {
+        border: 0px black solid;
+        width: 240px;
+        height: 300px;
+        background-color: #eee;
+      }
+      .left.drawing-pad {
+      }
+      .left.drawing-pad-outer {
+        margin-left: 75px;
+      }
+      ::-webkit-input-placeholder {
+        color: #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <div class='screen'>
+<div class='left pencil icon'></div>
+<div class='left writing-hanzi'>
+你
+</div>
+<br clear='all'>
+<div class='left shapes icon'></div>
+<div class='left shaped-like'>
+PERSONAL ELBOW DROPS
+</div>
+<br clear='all'>
+    </div>
+<script type="text/javascript">
+var canvas, ctx, flag = false,
+    prevX = 0,
+    currX = 0,
+    prevY = 0,
+    currY = 0,
+    dot_flag = false;
+
+var x = "black",
+    lineWidth = 10;
+
+function init() {
+    canvas = document.getElementById('can');
+    ctx = canvas.getContext("2d");
+    w = canvas.width;
+    h = canvas.height;
+
+    canvas.addEventListener("mousemove", function (e) { findxy('move', e) }, false);
+    canvas.addEventListener("mousedown", function (e) { findxy('down', e) }, false);
+    canvas.addEventListener("mouseup", function (e) { findxy('up', e) }, false);
+    canvas.addEventListener("mouseout", function (e) { findxy('out', e) }, false);
+
+    canvas.addEventListener("touchstart", function (e) { findxy('down', e) }, false);
+    canvas.addEventListener("touchmove", function (e) {
+      findxy2('move', e);
+      e.preventDefault();
+    }, false);
+}
+
+function draw() {
+    ctx.beginPath();
+    ctx.moveTo(prevX, prevY);
+    ctx.lineTo(currX, currY);
+    ctx.strokeStyle = x;
+    ctx.lineWidth = lineWidth;
+    ctx.stroke();
+    ctx.closePath();
+
+    draw_circle();
+}
+
+function draw_circle() {
+    ctx.arc(currX, currY, lineWidth / 2, 0, 2 * Math.PI, false);
+    ctx.fillStyle = x;
+    ctx.fill();
+}
+
+function findxy2(res, e) {
+  prevX = currX;
+  prevY = currY;
+  currX = e.touches[0].clientX - canvas.offsetLeft;
+  currY = e.touches[0].clientY - canvas.offsetTop;
+  draw();
+}
+
+function findxy(res, e) {
+    if (res == 'down') {
+        prevX = currX;
+        prevY = currY;
+        currX = e.clientX - canvas.offsetLeft;
+        currY = e.clientY - canvas.offsetTop;
+
+        flag = true;
+        dot_flag = true;
+        if (dot_flag) {
+            ctx.beginPath();
+            ctx.fillStyle = x;
+            ctx.fillRect(currX, currY, 2, 2);
+            ctx.closePath();
+            dot_flag = false;
+        }
+
+        draw_circle();
+    }
+    if (res == 'up' || res == "out") {
+        flag = false;
+    }
+    if (res == 'move') {
+        if (flag) {
+            prevX = currX;
+            prevY = currY;
+            currX = e.clientX - canvas.offsetLeft;
+            currY = e.clientY - canvas.offsetTop;
+            draw();
+        }
+    }
+}
+document.addEventListener("DOMContentLoaded", function(event) {
+  init();
+});
+</script>
+  </body>
+</html>
